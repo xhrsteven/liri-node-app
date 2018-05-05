@@ -1,8 +1,4 @@
 
-
-// var spotify = new Spotify(keys.spotify);
-// var client = new Twitter(keys.twitter);
-
 //Grab data from key.js
 var keys = require('./key.js');
 var request = require('request');
@@ -10,6 +6,9 @@ var twitter = require('twitter');
 var spotify = require('node-spotify-api');
 var fs = require('fs');
 var dotenv = require('dotenv').config();
+// var spotify = new spotify(keys.spotify);
+// var client = new twitter(keys.twitter);
+
 
 //store array
 var nodeArg = process.argv;
@@ -23,7 +22,7 @@ for(var i=3; i<nodeArg.length; i++){
     if(i>3 && i<nodeArg.length){
         input = input+ '+'+nodeArg[i];
     }else{
-        input += nodeArg;
+        input += nodeArg[i];
     }
 }
 
@@ -36,7 +35,7 @@ switch (functions) {
         spotifysong();
         break;
     case 'movie-this':
-        omdb();
+        omdb(input);
         break;
     case 'do-what-it-says':
         doThing();
@@ -69,11 +68,24 @@ function omdb(movie) {
     request(queryURL, function (err, response,body) {
         if(!err){
             var movieBody = JSON.parse(body);
-            console.log(movieBody);
-            console.log(movieBody.Title);
-            console.log(movieBody.Year);
-            console.log(JSON.stringify(body).rating);
-            console.log()
+            // console.log(movieBody);
+            // console.log(movieBody.Title);
+            // console.log(movieBody.Year);
+            // console.log(movieBody.imdbRating);
+            // console.log(movieBody.Country);
+            // console.log(movieBody.Language);
+            // console.log(movieBody.Plot);
+            // console.log(movieBody.Actors);
+            // console.log(movieBody.Ratings[1].Value);
+            //append to File
+            fs.appendFile('log.txt', '* Title of the movie: ' + movieBody.Title);
+            fs.appendFile('log.txt', '* Year the movie came out: ' + movieBody.Year);
+            fs.appendFile('log.txt', '* IMDB Rating of the movie: ' + movieBody.imdbRating);
+            fs.appendFile('log.txt', '* Rotten Tomatoes Rating of the movie: ' + movieBody.Ratings[1].Value);
+            fs.appendFile('log.txt', '* Country where the movie was produced: ' + movieBody.Country);
+            fs.appendFile('log.txt', '* Language of the movie: ' + movieBody.Language);
+            fs.appendFile('log.txt', '* Plot of the movie: ' + movieBody.Plot);
+            fs.appendFile('log.txt', '* Actors in the movie: ' + movieBody.Actors);
         }
     })
 }
